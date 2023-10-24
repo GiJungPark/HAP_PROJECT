@@ -3,20 +3,23 @@ package me.gijung.HAP.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 
+@Component
+@RequiredArgsConstructor
 public class JwtUtil {
 
     @Value("${jwt.token.secret}")
-    private static String key;
+    private String key;
+    private Long expireTimeMs = 1000 * 60 * 60L;
 
-    private static Long expireTimeMs = 1000 * 60 * 60L;
 
-
-    public static String createToken(String email) {
+    public String createToken(String email) {
         Claims claims = Jwts.claims();
         claims.put("email", email);
 
@@ -30,17 +33,18 @@ public class JwtUtil {
 
     }
 
-    public static boolean isExpired(String token) {
+    public boolean isExpired(String token) {
         return getExpiration(token).before(new Date());
     }
 
-    public static Date getExpiration(String token) {
+    public Date getExpiration(String token) {
         return Jwts.parser().setSigningKey(key).parseClaimsJwt(token)
                 .getBody().getExpiration();
     }
 
-    public static String getEmail(String token) {
+    public String getEmail(String token) {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token)
                 .getBody().get("email", String.class);
     }
+
 }

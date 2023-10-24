@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
@@ -45,7 +46,7 @@ public class UserService {
 
         checkPassword(selectedUser, request.getPassword());
 
-        String token = JwtUtil.createToken(selectedUser.getEmail());
+        String token = jwtUtil.createToken(selectedUser.getEmail());
 
         // 토큰 redis 저장
 

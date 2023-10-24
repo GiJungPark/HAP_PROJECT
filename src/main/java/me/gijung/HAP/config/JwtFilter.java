@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final UserService userService;
+    private final JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -35,12 +35,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String token = authorization.split(" ")[1];
 
-        if(JwtUtil.isExpired(token)) {
+        if(jwtUtil.isExpired(token)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String email = JwtUtil.getEmail(token);
+        String email = jwtUtil.getEmail(token);
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 email, null, List.of(new SimpleGrantedAuthority("USER")));
