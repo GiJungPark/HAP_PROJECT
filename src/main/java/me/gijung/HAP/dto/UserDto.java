@@ -2,6 +2,7 @@ package me.gijung.HAP.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
@@ -10,6 +11,7 @@ public class UserDto {
     @Getter
     @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class RequestSingUp {
         private String email;
         private String password;
@@ -21,6 +23,7 @@ public class UserDto {
     @Getter
     @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class RequestLogin {
         private String email;
         private String password;
