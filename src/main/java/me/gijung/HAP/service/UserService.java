@@ -84,21 +84,21 @@ public class UserService {
     public void checkDuplicateEmail(String email) {
         userRepository.findByEmail(email)
                 .ifPresent(user -> {
-                    throw new AppException(ErrorCode.EMAIL_DUPLICATED, ErrorCode.EMAIL_DUPLICATED.getMessage());
+                    throw new AppException(ErrorCode.EMAIL_DUPLICATED);
                 });
     }
 
     public void checkDuplicateNickname(String nickname) {
         userRepository.findByNickname(nickname)
                 .ifPresent(user -> {
-                    throw new AppException(ErrorCode.NICKNAME_DUPLICATED, ErrorCode.NICKNAME_DUPLICATED.getMessage());
+                    throw new AppException(ErrorCode.NICKNAME_DUPLICATED);
                 });
     }
 
     public void checkDuplicatePhone(String phone) {
         userRepository.findByPhone(phone)
                 .ifPresent(user -> {
-                    throw new AppException(ErrorCode.PHONE_DUPLICATED, ErrorCode.PHONE_DUPLICATED.getMessage());
+                    throw new AppException(ErrorCode.PHONE_DUPLICATED);
                 });
     }
 }
