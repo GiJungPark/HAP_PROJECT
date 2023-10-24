@@ -6,6 +6,7 @@ import me.gijung.HAP.dto.UserDto;
 import me.gijung.HAP.exception.AppException;
 import me.gijung.HAP.exception.ErrorCode;
 import me.gijung.HAP.repository.UserRepository;
+import me.gijung.HAP.utils.JwtUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     // 회원가입, 로그인, 로그아웃, 삭제 로직
     public String singUp(UserDto.RequestSingUp request) {
@@ -38,13 +40,16 @@ public class UserService {
     }
 
     public String login(UserDto.RequestLogin request) {
-        // 사용자 정보 확인
 
-        // 토큰 생성
+        User selectedUser = checkNotFoundUser(request.getEmail());
+
+        checkPassword(selectedUser, request.getPassword());
+
+        String token = JwtUtil.createToken(selectedUser.getEmail());
 
         // 토큰 redis 저장
 
-        return "token";
+        return token;
     }
 
     public String logout() {
@@ -104,11 +109,17 @@ public class UserService {
                 });
     }
 
-    public void checkNotFoundUser(String email) {
-        // 가입된 이메일이 있는지 확인
+
+    public User checkNotFoundUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOTFOUND));
+        return user;
     }
 
-    public void checkPassword(String email, String password) {
-        // 비밀번호가 일치하는지 확인
+    public void checkPassword(User user, String password) {
+        if(!bCryptPasswordEncoder.matches(password, user.getPassword())) {
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
+        }
     }
+
 }
