@@ -6,6 +6,7 @@ import me.gijung.HAP.dto.UserDto;
 import me.gijung.HAP.exception.AppException;
 import me.gijung.HAP.exception.ErrorCode;
 import me.gijung.HAP.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 회원가입, 로그인, 로그아웃, 삭제 로직
     public String singUp(UserDto.RequestSingUp request) {
@@ -25,7 +27,7 @@ public class UserService {
 
         User user = User.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(bCryptPasswordEncoder.encode(request.getPassword()))
                 .name(request.getName())
                 .nickname(request.getNickname())
                 .phone(request.getPhone())
@@ -100,5 +102,13 @@ public class UserService {
                 .ifPresent(user -> {
                     throw new AppException(ErrorCode.PHONE_DUPLICATED);
                 });
+    }
+
+    public void checkNotFoundUser(String email) {
+        // 가입된 이메일이 있는지 확인
+    }
+
+    public void checkPassword(String email, String password) {
+        // 비밀번호가 일치하는지 확인
     }
 }
