@@ -10,7 +10,7 @@ public class UserDto {
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class RequestSingup {
+    public static class RequestSingUp {
         private String email;
         private String password;
         private String name;
