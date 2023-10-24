@@ -22,7 +22,7 @@ public enum ErrorCode {
     NICKNAME_DUPLICATED(HttpStatus.CONFLICT.value(), "해당 닉네임은 이미 사용중입니다."),
 
 
-    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED.value(), ""),
+    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED.value(), "비밀번호를 잘못 입력하였습니다."),
     INVALID_EMAIL_AUTH_CODE(HttpStatus.UNAUTHORIZED.value(), ""),
 
     UNABLE_TO_SEND_EMAIL(HttpStatus.CONFLICT.value(), ""),
