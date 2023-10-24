@@ -25,5 +25,12 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<UserDto.ResponseToken> login(@RequestBody UserDto.RequestLogin request) {
+        String token = userService.login(request);
+        UserDto.ResponseToken response = new UserDto.ResponseToken(HttpStatus.OK, token);
+
+        return ResponseEntity.ok().body(response);
+    }
 
 }
