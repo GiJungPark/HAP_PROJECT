@@ -3,6 +3,8 @@ package me.gijung.HAP.service;
 import lombok.RequiredArgsConstructor;
 import me.gijung.HAP.domain.User;
 import me.gijung.HAP.dto.UserDto;
+import me.gijung.HAP.exception.AppException;
+import me.gijung.HAP.exception.ErrorCode;
 import me.gijung.HAP.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +15,13 @@ public class UserService {
     private final UserRepository userRepository;
 
     // 회원가입, 로그인, 로그아웃, 삭제 로직
-    public String singUp(UserDto.RequestSingup request) {
-        // 이메일 중복 체크 로직
+    public String singUp(UserDto.RequestSingUp request) {
 
-        // 닉네임 중복 체크 로직
+        checkDuplicateEmail(request.getEmail());
 
-        // 전화번호 중복 체크 로직
+        checkDuplicateNickname(request.getNickname());
+
+        checkDuplicatePhone(request.getPhone());
 
         User user = User.builder()
                 .email(request.getEmail())
@@ -78,21 +81,24 @@ public class UserService {
 
 
     // 중복 체크 로직
-    public String checkDuplicateEmail(String email) {
-        // 사용자 정보 확인
-
-        return "SUCCESS";
+    public void checkDuplicateEmail(String email) {
+        userRepository.findByEmail(email)
+                .ifPresent(user -> {
+                    throw new AppException(ErrorCode.EMAIL_DUPLICATED, ErrorCode.EMAIL_DUPLICATED.getMessage());
+                });
     }
 
-    public String checkDuplicateNickname(String nickname) {
-        // 사용자 정보 확인
-
-        return "SUCCESS";
+    public void checkDuplicateNickname(String nickname) {
+        userRepository.findByNickname(nickname)
+                .ifPresent(user -> {
+                    throw new AppException(ErrorCode.NICKNAME_DUPLICATED, ErrorCode.NICKNAME_DUPLICATED.getMessage());
+                });
     }
 
-    public String checkDuplicatePhone(String phone) {
-        // 사용자 정보 확인
-
-        return "SUCCESS";
+    public void checkDuplicatePhone(String phone) {
+        userRepository.findByPhone(phone)
+                .ifPresent(user -> {
+                    throw new AppException(ErrorCode.PHONE_DUPLICATED, ErrorCode.PHONE_DUPLICATED.getMessage());
+                });
     }
 }
