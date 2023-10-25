@@ -1,7 +1,10 @@
 package me.gijung.HAP.controller;
 
 import lombok.RequiredArgsConstructor;
+import me.gijung.HAP.dto.MailDto;
 import me.gijung.HAP.dto.UserDto;
+import me.gijung.HAP.service.MailAuthenticationService;
+import me.gijung.HAP.service.MailService;
 import me.gijung.HAP.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final MailService mailService;
+    private final MailAuthenticationService mailAuthenticationService;
 
     @PostMapping("")
     public ResponseEntity<UserDto.ResponseMessage> singUp(@RequestBody UserDto.RequestSingUp request) {
@@ -27,10 +32,33 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/emailVerification")
+    public ResponseEntity<MailDto.ResponseMessage> signUpEmailAuthCodeSend(@RequestParam("email") String email) {
+
+        userService.checkDuplicateEmail(email);
+
+        String message = mailService.sendCodeToEmail(email);
+
+        MailDto.ResponseMessage response = new MailDto.ResponseMessage(HttpStatus.OK, message);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/emailVerification")
+    public ResponseEntity<MailDto.ResponseMessage> signUpEmailVerification(@RequestBody MailDto.RequestVerification request) {
+
+        userService.checkDuplicateEmail(request.getEmail());
+
+        String message = mailAuthenticationService.verifiedCode(request.getEmail(), request.getAuthCode());
+        MailDto.ResponseMessage response = new MailDto.ResponseMessage(HttpStatus.OK, message);
+
+        return ResponseEntity.ok().body(response);
+    }
+
     @GetMapping("/email")
-    public ResponseEntity<UserDto.ResponseMessage> checkDuplicateEmail(@RequestParam("email") String email) {
+    public ResponseEntity<MailDto.ResponseMessage> checkDuplicateEmail(@RequestParam("email") String email) {
         String message = userService.checkDuplicateEmail(email);
-        UserDto.ResponseMessage response = new UserDto.ResponseMessage(HttpStatus.OK, message);
+        MailDto.ResponseMessage response = new MailDto.ResponseMessage(HttpStatus.OK, message);
 
         return ResponseEntity.ok().body(response);
     }
@@ -62,6 +90,30 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<UserDto.ResponseMessage> logout() {
         String message = userService.logout();
+        UserDto.ResponseMessage response = new UserDto.ResponseMessage(HttpStatus.OK, message);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+
+    @GetMapping("/changePassword/emailVerification")
+    public ResponseEntity<UserDto.ResponseMessage> changePasswordEmailAuthCodeSend(@RequestParam("email") String email) {
+
+        userService.checkNotFoundUser(email);
+
+        String message = mailService.sendCodeToEmail(email);
+
+        UserDto.ResponseMessage response = new UserDto.ResponseMessage(HttpStatus.OK, message);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/changePassword/emailVerification")
+    public ResponseEntity<UserDto.ResponseMessage> changePasswordEmailVerification(@RequestBody MailDto.RequestVerification request) {
+
+        userService.checkNotFoundUser(request.getEmail());
+
+        String message = mailAuthenticationService.verifiedCode(request.getEmail(), request.getAuthCode());
         UserDto.ResponseMessage response = new UserDto.ResponseMessage(HttpStatus.OK, message);
 
         return ResponseEntity.ok().body(response);
