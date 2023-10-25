@@ -13,7 +13,6 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class MailAuthenticationService {
 
-    private final UserService userService;
     private final RedisService redisService;
 
 
@@ -21,8 +20,6 @@ public class MailAuthenticationService {
 
 
     public String verifiedCode(String email, String authCode) {
-
-        userService.checkNotFoundUser(email);
 
         String redisAuthCode = redisService.getValues(AUTH_CODE_PREFIX + email);
         if(!redisService.checkExistsValue(redisAuthCode) || !redisAuthCode.equals(authCode)) {

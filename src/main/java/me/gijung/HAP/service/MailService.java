@@ -52,8 +52,6 @@ public class MailService {
 
     public String sendCodeToEmail(String toMail) {
 
-        userService.checkNotFoundUser(toMail);
-
         String title = "HAP 계정 메일 인증";
         String authCode = mailAuthenticationService.authCode();
         String context = "아래의 인증번호를 복사하여 이메일 인증을 완료해주세요. \n" + authCode

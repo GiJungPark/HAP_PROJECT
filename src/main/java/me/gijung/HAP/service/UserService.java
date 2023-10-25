@@ -89,31 +89,38 @@ public class UserService {
 
 
     // 중복 체크 로직
-    public void checkDuplicateEmail(String email) {
+    public String checkDuplicateEmail(String email) {
         userRepository.findByEmail(email)
                 .ifPresent(user -> {
                     throw new AppException(ErrorCode.EMAIL_DUPLICATED);
                 });
+
+        return "사용가능한 이메일입니다.";
     }
 
-    public void checkDuplicateNickname(String nickname) {
+    public String checkDuplicateNickname(String nickname) {
         userRepository.findByNickname(nickname)
                 .ifPresent(user -> {
                     throw new AppException(ErrorCode.NICKNAME_DUPLICATED);
                 });
+
+        return "사용가능한 닉네임입니다.";
     }
 
-    public void checkDuplicatePhone(String phone) {
+    public String checkDuplicatePhone(String phone) {
         userRepository.findByPhone(phone)
                 .ifPresent(user -> {
                     throw new AppException(ErrorCode.PHONE_DUPLICATED);
                 });
+
+        return "사용가능한 전화번호입니다.";
     }
 
 
     public User checkNotFoundUser(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOTFOUND));
+
         return user;
     }
 
@@ -122,5 +129,4 @@ public class UserService {
             throw new AppException(ErrorCode.INVALID_PASSWORD);
         }
     }
-
 }
