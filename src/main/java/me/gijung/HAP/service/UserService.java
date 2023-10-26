@@ -7,16 +7,30 @@ import me.gijung.HAP.exception.AppException;
 import me.gijung.HAP.exception.ErrorCode;
 import me.gijung.HAP.repository.UserRepository;
 import me.gijung.HAP.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
+
     private final UserRepository userRepository;
+
+    private final RedisService redisService;
+
     private final JwtUtil jwtUtil;
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
+    @Value("${spring.data.redis.jwt-key}")
+    private String redisKey;
 
 
     // 회원가입, 로그인, 로그아웃, 삭제 로직
@@ -48,15 +62,23 @@ public class UserService {
 
         String token = jwtUtil.createToken(selectedUser.getEmail());
 
-        // 토큰 redis 저장
+
+        long millisecondsUntilExpiration = jwtUtil.getExpiration(token).getTime() - new Date().getTime();
+
+        Duration durationUntilExpiration = Duration.ofMillis(millisecondsUntilExpiration);
+
+        redisService.setValues(redisKey + selectedUser.getEmail(), token, durationUntilExpiration);
 
         return token;
     }
 
     public String logout() {
-        // 토큰의 사용자 정보 확인
 
-        // redis 토큰 삭제
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (redisService.checkExistsValue(redisKey + email)) {
+            redisService.deleteValues(redisKey + email);
+        }
 
         return "SUCCESS";
     }
