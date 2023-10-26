@@ -26,6 +26,8 @@ public class MailAuthenticationService {
             throw new AppException(ErrorCode.INVALID_EMAIL_AUTH_CODE);
         }
 
+        redisService.deleteValues(AUTH_CODE_PREFIX + email);
+
         return "인증에 성공했습니다.";
     }
 
