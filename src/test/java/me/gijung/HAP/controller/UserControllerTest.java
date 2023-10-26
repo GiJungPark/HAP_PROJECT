@@ -5,6 +5,8 @@ import com.jayway.jsonpath.JsonPath;
 import me.gijung.HAP.dto.UserDto;
 import me.gijung.HAP.exception.AppException;
 import me.gijung.HAP.exception.ErrorCode;
+import me.gijung.HAP.service.MailAuthenticationService;
+import me.gijung.HAP.service.MailService;
 import me.gijung.HAP.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,6 +37,12 @@ public class UserControllerTest {
 
     @MockBean
     UserService userService;
+
+    @MockBean
+    MailService mailService;
+
+    @MockBean
+    MailAuthenticationService mailAuthenticationService;
 
     @Test
     @DisplayName("회원가입 성공")
