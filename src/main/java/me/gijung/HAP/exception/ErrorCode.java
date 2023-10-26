@@ -23,6 +23,7 @@ public enum ErrorCode {
 
 
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED.value(), "비밀번호를 잘못 입력하였습니다."),
+    INVALID_NAME(HttpStatus.UNAUTHORIZED.value(), "이름을 잘못 입력하였습니다."),
     INVALID_EMAIL_AUTH_CODE(HttpStatus.UNAUTHORIZED.value(), ""),
 
     UNABLE_TO_SEND_EMAIL(HttpStatus.CONFLICT.value(), ""),

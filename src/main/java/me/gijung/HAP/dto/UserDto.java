@@ -32,6 +32,15 @@ public class UserDto {
     @Getter
     @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
+    public static class RequestChangePassword {
+        private String email;
+        private String password;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
     public static class ResponseMessage {
         private HttpStatus httpStatus;
         private String message;
@@ -44,4 +53,13 @@ public class UserDto {
         private HttpStatus httpStatus;
         private String token;
     }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    public static class ResponseEmail {
+        private HttpStatus httpStatus;
+        private String email;
+    }
+
 }

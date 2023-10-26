@@ -96,17 +96,27 @@ public class UserService {
 
     // 찾기, 변경 로직
     public String findEmail(String name, String phone) {
-        // 사용자 정보 확인
 
-        return "email";
+        User selectedUser = userRepository.findByPhone(phone)
+                .orElseThrow(() -> new AppException(ErrorCode.PHONE_NOTFOUND));
+
+        if(!selectedUser.getName().equals(name)){
+            throw new AppException(ErrorCode.INVALID_NAME);
+        }
+
+        return selectedUser.getEmail();
     }
 
     public String changePassword(String email, String password) {
-        // 사용자 정보 확인
 
-        // 비밀번호 저장
+        User selectedUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOTFOUND));
 
-        return "SUCCESS";
+        selectedUser.setPassword(bCryptPasswordEncoder.encode(password));
+
+        userRepository.save(selectedUser);
+
+        return "비밀번호가 변경되었습니다.";
     }
 
 
