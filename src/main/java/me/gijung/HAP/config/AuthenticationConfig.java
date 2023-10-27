@@ -27,7 +27,7 @@ public class AuthenticationConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                .requestMatchers("/api/v1/user", "/api/v1/user/login", "/api/v1/user/emailVerification").permitAll()
+                .requestMatchers("/api/v1/user", "/api/v1/user/login", "/api/v1/user/emailVerification", "/api/v1/place").permitAll()
                 .requestMatchers(HttpMethod.POST).authenticated()
                 .and()
                 .sessionManagement()
