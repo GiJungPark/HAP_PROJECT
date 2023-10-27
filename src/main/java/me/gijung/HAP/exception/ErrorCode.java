@@ -21,10 +21,13 @@ public enum ErrorCode {
     PHONE_DUPLICATED(HttpStatus.CONFLICT.value(), "해당 전화번호는 이미 사용중입니다."),
     NICKNAME_DUPLICATED(HttpStatus.CONFLICT.value(), "해당 닉네임은 이미 사용중입니다."),
 
-
+    // 401 UNAUTHORIZED 인증 자격이 없음 (이전 입력 받은 정보와 부응하지 못하는 값)
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED.value(), "비밀번호를 잘못 입력하였습니다."),
     INVALID_NAME(HttpStatus.UNAUTHORIZED.value(), "이름을 잘못 입력하였습니다."),
-    INVALID_EMAIL_AUTH_CODE(HttpStatus.UNAUTHORIZED.value(), ""),
+    INVALID_EMAIL_AUTH_CODE(HttpStatus.UNAUTHORIZED.value(), "인증 코드를 잘못 입력하였습니다."),
+
+    // 검색에서의 에러 코드, 검색 정보가 존재 하지 않는 경우
+    NOT_FOUND_INFORMATION(HttpStatus.NOT_FOUND.value(), "검색 정보가 없습니다."),
 
     UNABLE_TO_SEND_EMAIL(HttpStatus.CONFLICT.value(), ""),
 
