@@ -1,5 +1,7 @@
 package me.gijung.HAP.utils.naver;
 
+import me.gijung.HAP.utils.naver.dto.SearchImageRequest;
+import me.gijung.HAP.utils.naver.dto.SearchImageResponse;
 import me.gijung.HAP.utils.naver.dto.SearchLocalRequest;
 import me.gijung.HAP.utils.naver.dto.SearchLocalResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,6 +53,33 @@ public class NaverUtil {
                         httpEntity,
                         responseType
                 );
+        return responseEntity.getBody();
+    }
+
+    public SearchImageResponse imageSearch(SearchImageRequest searchImageRequest) {
+        var uri = UriComponentsBuilder
+                .fromUriString(naverImageSearchUrl)
+                .queryParams(searchImageRequest.toMultiValueMap())
+                .build()
+                .encode()
+                .toUri();
+
+        var headers = new HttpHeaders();
+        headers.set("X-Naver-Client-Id", naverClientId);
+        headers.set("X-Naver-Client-Secret", naverSecret);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        var httpEntity = new HttpEntity<>(headers);
+        var responseType = new ParameterizedTypeReference<SearchImageResponse>(){};
+
+        var responseEntity = new RestTemplate()
+                .exchange(
+                        uri,
+                        HttpMethod.GET,
+                        httpEntity,
+                        responseType
+                );
+
         return responseEntity.getBody();
     }
 

@@ -16,7 +16,7 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping("")
-    public SearchDto.SearchListItem search(@RequestParam String query) {
+    public SearchDto search(@RequestParam String query) {
         return searchService.search(query);
     }
 
