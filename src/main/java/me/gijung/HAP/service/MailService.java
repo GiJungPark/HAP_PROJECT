@@ -2,7 +2,7 @@ package me.gijung.HAP.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import me.gijung.HAP.domain.Mail;
+import me.gijung.HAP.dto.MailDto;
 import me.gijung.HAP.exception.AppException;
 import me.gijung.HAP.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,8 +21,6 @@ public class MailService {
 
     private final RedisService redisService;
 
-    private final UserService userService;
-
     private final MailAuthenticationService mailAuthenticationService;
 
 
@@ -32,7 +30,7 @@ public class MailService {
     private long authCodeExpirationMillis;
 
 
-    public void sendMail(Mail mail) {
+    public void sendMail(MailDto mail) {
         SimpleMailMessage mailForm = createMailForm(mail);
         try{
             mailSender.send(mailForm);
@@ -41,7 +39,7 @@ public class MailService {
         }
     }
 
-    private SimpleMailMessage createMailForm(Mail mail) {
+    private SimpleMailMessage createMailForm(MailDto mail) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mail.getToMail());
         message.setSubject(mail.getTitle());
@@ -57,7 +55,7 @@ public class MailService {
         String context = "아래의 인증번호를 복사하여 이메일 인증을 완료해주세요. \n" + authCode
                 + "\n인증번호는 10분 동안만 유효합니다.";
 
-        Mail mail = Mail.builder()
+        MailDto mail = MailDto.builder()
                 .toMail(toMail)
                 .title(title)
                 .content(context)
