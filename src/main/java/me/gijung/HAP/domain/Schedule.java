@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,18 +22,20 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class User {
+public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
-    private String password;
-    private String name;
-    private String nickname;
-    private String phone;
+    private LocalTime time;
 
-    @OneToMany(mappedBy = "user")
+    private LocalDate date;
+
+    @OneToMany(mappedBy = "schedule")
+    private Set<SchedulePlace> schedulePlaces = new HashSet<>();
+
+    @OneToMany(mappedBy = "schedule")
     private Set<UserSchedule> userSchedules = new HashSet<>();
+
 }
