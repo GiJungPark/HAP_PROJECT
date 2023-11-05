@@ -38,7 +38,7 @@ public class JwtUtil {
     }
 
     public Date getExpiration(String token) {
-        return Jwts.parser().setSigningKey(key).parseClaimsJwt(token)
+        return Jwts.parser().setSigningKey(key).parseClaimsJws(token)
                 .getBody().getExpiration();
     }
 
