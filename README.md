@@ -26,7 +26,7 @@
 
 # DB 설계
 
-### 테이블 리스트
+## 테이블 리스트
 
 ### 유저 테이블
 
@@ -73,7 +73,7 @@
 
 ---
 
-### ERD
+## ERD
 
 ![HAP_ERD.png](README_IMAGE/HAP_ERD.png)
 
@@ -81,7 +81,7 @@
 
 # RESTful API 설계
 
-### API 참고사항
+## API 참고사항
 
 POST 방식의 API 호출의 응답은 다음과 같다.
 
@@ -105,32 +105,111 @@ GET 방식의 API 호출의 응답은 다음과 같다.
 
 ---
 
-### 회원 API
+## 회원 API
 
-POST /api/v1/user
+### POST /api/v1/user
 
 - 회원 가입을 진행한다.
-- Body에 아이디, 비밀번호, 이름, 전화번호, 닉네임을 JSON 형식으로 기입해야 한다.
+- Body에 아이디, 비밀번호, 이름, 닉네임, 전화번호를 JSON 형식으로 기입해야 한다.
+    ```json
+    {
+      "email": "{이메일}",
+      "password": "{패스워드}",
+      "name": "{이름}",
+      "nickname": "{닉네임}",
+      "phone": "{전화번호}"
+    } 
+    ```
 - 이메일(아이디) 인증 절차와 전화번호, 닉네임은 중복 확인 절차를 거친 후 호출 해야한다.
 - 호출 성공 시: 성공 메세지를 JSON 형식으로 응답한다.
+    ```json
+    {
+      "status": "OK",
+      "message": "SUCCESS"
+    }
+    ```
 - 호출 실패 시: 에러 메세지를 JSON 형식으로 응답한다.
-(아이디, 전화번호, 닉네임 중 하나 이상 중복되는 경우)
+    ```json
+    {
+      "status": "{ErrorCode}",
+      "message": "{ErrorMessage}"
+    }
+    ```
+  (아이디, 전화번호, 닉네임 중 하나 이상 중복되는 경우)
 
-GET /api/v1/user/{회원 아이디}
+### GET /api/v1/duplicate/email?email={email}
+
+- 이메일의 중복을 확인한다.
+- 호출 성공 시: 성공 메세지를 JSON 형식으로 응답한다.
+    ```json
+    {
+      "status": "OK",
+      "message": "사용가능한 이메일입니다."
+    }
+    ```
+- 호출 실패 시: 에러 메세지를 JSON 형식으로 응답한다.
+    ```json
+    {
+      "status": "409",
+      "message": "해당 이메일은 이미 사용중입니다."
+    }
+    ```
+
+### GET /api/v1/duplicate/nickname?nickname={nickname}
+
+- 닉네임의 중복을 확인한다.
+- 호출 성공 시: 성공 메세지를 JSON 형식으로 응답한다.
+    ```json
+    {
+      "status": "OK",
+      "message": "사용가능한 닉네임입니다."
+    }
+    ```
+- 호출 실패 시: 에러 메세지를 JSON 형식으로 응답한다.
+    ```json
+    {
+      "status": "409",
+      "message": "해당 닉네임은 이미 사용중입니다."
+    }
+    ```
+
+### GET /api/v1/duplicate/phone?phone={phone}
+
+- 전화번호의 중복을 확인한다.
+- 호출 성공 시: 성공 메세지를 JSON 형식으로 응답한다.
+    ```json
+    {
+      "status": "OK",
+      "message": "사용가능한 전화번호입니다."
+    }
+    ```
+- 호출 실패 시: 에러 메세지를 JSON 형식으로 응답한다.
+    ```json
+    {
+      "status": "409",
+      "message": "해당 전화번호는 이미 사용중입니다."
+    }
+    ```
+
+
+### GET /api/v1/user/{회원 아이디}
 
 - 아이디, 이름, 전화번호, 닉네임을 출력한다.
 - 호출 성공 시: 아이디, 이름, 전화번호, 닉네임을 JSON 형식으로 응답한다.
 - 호출 실패 시: 에러 메세지를 JSON 형식으로 응답한다.
 (회원 아이디가 조회되지 않는 경우)
 
-PATCH /api/v1/user/{회원 아이디}
+### PATCH /api/v1/user/{회원 아이디}
 
 - /api/v1/user/password/{회원 아이디} 비밀번호 변경
 해당 API는 본인 인증 절차를 거친 후에 호출해야 한다.
+
 - /api/v1/user/user_phone/{회원 아이디} 전화번호 변경
 해당 API는 닉네임 중복 확인 절차를 걸친 후 호출해야 한다.
+
 - /api/v1/user/user_nickname/{회원 아이디} 닉네임 변경
 해당 API는 닉네임 중복 확인 절차를 걸친 후 호출해야 한다.
+
 - 호출 성공 시: 성공 메세지를 JSON 형식으로 응답한다.
 - 호출 실패 시: 에러 메세지를 JSON 형식으로 응답한다.
 (전화번호, 닉네임 중 하나 이상 중복되는 경우)
