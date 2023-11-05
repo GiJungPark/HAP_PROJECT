@@ -42,7 +42,7 @@ public class UserDto {
     @Setter
     @AllArgsConstructor
     public static class ResponseMessage {
-        private HttpStatus httpStatus;
+        private HttpStatus status;
         private String message;
     }
 
@@ -50,7 +50,7 @@ public class UserDto {
     @Setter
     @AllArgsConstructor
     public static class ResponseToken {
-        private HttpStatus httpStatus;
+        private HttpStatus status;
         private String token;
     }
 
@@ -58,7 +58,7 @@ public class UserDto {
     @Setter
     @AllArgsConstructor
     public static class ResponseEmail {
-        private HttpStatus httpStatus;
+        private HttpStatus status;
         private String email;
     }
 

@@ -30,7 +30,7 @@ public class MailDto {
     @Setter
     @AllArgsConstructor
     public static class ResponseMessage {
-        private HttpStatus httpStatus;
+        private HttpStatus status;
         private String message;
     }
 }
